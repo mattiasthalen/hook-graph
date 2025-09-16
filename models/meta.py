@@ -18,8 +18,10 @@ for frame in frames:
         hook_row = {"frame": frame["name"], **hook}
         hooks.append(hook_row)
 
+
 @model(
     "meta.concepts",
+    kind="full",
     columns={
         "name": "text",
         "description": "text",
@@ -34,8 +36,10 @@ def execute(
 ) -> pl.DataFrame:
     yield pl.from_dicts(concepts)
 
+
 @model(
     "meta.keysets",
+    kind="full",
     columns={
         "name": "text",
         "concept": "text",
@@ -52,8 +56,10 @@ def execute(
 ) -> pl.DataFrame:
     yield pl.from_dicts(keysets)
 
+
 @model(
     "meta.frames",
+    kind="full",
     columns={
         "name": "text",
         "source_table": "text",
@@ -69,9 +75,12 @@ def execute(
 ) -> pl.DataFrame:
     yield pl.from_dicts(frames).drop("hooks")
 
+
 @model(
     "meta.hooks",
+    kind="full",
     columns={
+        "frame": "text",
         "name": "text",
         "concept": "text",
         "keyset": "text",
