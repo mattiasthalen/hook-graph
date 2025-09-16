@@ -6,5 +6,6 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "duckcli>=0.2.1",
+    "polars>=1.33.1",
     "sqlmesh[lsp]>=0.219.0",
 ]

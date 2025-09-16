@@ -1,0 +1,88 @@
+import polars as pl
+import typing as t
+import yaml
+
+from datetime import datetime
+from sqlmesh import ExecutionContext, model
+
+with open("./models/manifest.yml", "r") as file:
+    manifest = yaml.safe_load(file)
+
+concepts = manifest.get("concepts")
+keysets = manifest.get("keysets")
+frames =  manifest.get("frames")
+hooks = []
+
+for frame in frames:
+    for hook in frame.get("hooks"):
+        hook_row = {"frame": frame["name"], **hook}
+        hooks.append(hook_row)
+
+@model(
+    "meta.concepts",
+    columns={
+        "name": "text",
+        "description": "text",
+    }
+)
+def execute(
+    context: ExecutionContext,
+    start: datetime,
+    end: datetime,
+    execution_time: datetime,
+    **kwargs: t.Any,
+) -> pl.DataFrame:
+    yield pl.from_dicts(concepts)
+
+@model(
+    "meta.keysets",
+    columns={
+        "name": "text",
+        "concept": "text",
+        "source_system": "text",
+        "description": "text",
+    }
+)
+def execute(
+    context: ExecutionContext,
+    start: datetime,
+    end: datetime,
+    execution_time: datetime,
+    **kwargs: t.Any,
+) -> pl.DataFrame:
+    yield pl.from_dicts(keysets)
+
+@model(
+    "meta.frames",
+    columns={
+        "name": "text",
+        "source_table": "text",
+        "description": "text",
+    }
+)
+def execute(
+    context: ExecutionContext,
+    start: datetime,
+    end: datetime,
+    execution_time: datetime,
+    **kwargs: t.Any,
+) -> pl.DataFrame:
+    yield pl.from_dicts(frames).drop("hooks")
+
+@model(
+    "meta.hooks",
+    columns={
+        "name": "text",
+        "concept": "text",
+        "keyset": "text",
+        "business_key_field": "text",
+    }
+)
+def execute(
+    context: ExecutionContext,
+    start: datetime,
+    end: datetime,
+    execution_time: datetime,
+    **kwargs: t.Any,
+) -> pl.DataFrame:
+    yield pl.from_dicts(hooks)
