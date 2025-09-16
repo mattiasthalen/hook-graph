@@ -1,0 +1,10 @@
+[project]
+name = "hook-graph"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "duckcli>=0.2.1",
+    "sqlmesh[lsp]>=0.219.0",
+]
