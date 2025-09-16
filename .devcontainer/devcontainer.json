@@ -1,17 +1,4 @@
 {
 	"name": "hook-graph",
-	"image": "mcr.microsoft.com/devcontainers/universal:2",
-	"features": {
-		"ghcr.io/va-h/devcontainers-features/uv:1": {}
-	},
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"eamodio.gitlens",
-				"ms-python.python",
-				"tobikodata.sqlmesh",
-				"openai.chatgpt"
-			]
-		}
-	}
+	"image": "mcr.microsoft.com/devcontainers/universal:2"
 }
