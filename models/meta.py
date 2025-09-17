@@ -30,14 +30,14 @@ for frame in frames:
         "description": "text",
     }
 )
-def execute(
+def execute( # type: ignore
     context: ExecutionContext,
     start: datetime,
     end: datetime,
     execution_time: datetime,
     **kwargs: t.Any,
 ) -> pl.DataFrame:
-    yield pl.from_dicts(concepts)
+    return pl.from_dicts(concepts)
 
 
 @model(
@@ -51,14 +51,14 @@ def execute(
         "description": "text",
     }
 )
-def execute(
+def execute( # type: ignore
     context: ExecutionContext,
     start: datetime,
     end: datetime,
     execution_time: datetime,
     **kwargs: t.Any,
 ) -> pl.DataFrame:
-    yield pl.from_dicts(keysets)
+    return pl.from_dicts(keysets)
 
 
 @model(
@@ -71,14 +71,14 @@ def execute(
         "description": "text",
     }
 )
-def execute(
+def execute( # type: ignore
     context: ExecutionContext,
     start: datetime,
     end: datetime,
     execution_time: datetime,
     **kwargs: t.Any,
 ) -> pl.DataFrame:
-    yield pl.from_dicts(frames).drop("hooks")
+    return pl.from_dicts(frames).drop("hooks")
 
 
 @model(
@@ -93,11 +93,11 @@ def execute(
         "business_key_field": "text",
     }
 )
-def execute(
+def execute( # type: ignore
     context: ExecutionContext,
     start: datetime,
     end: datetime,
     execution_time: datetime,
     **kwargs: t.Any,
 ) -> pl.DataFrame:
-    yield pl.from_dicts(hooks)
+    return pl.from_dicts(hooks)
