@@ -45,11 +45,17 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
         hook_expressions.append(hook_expression)
 
     sql = f"""
+    WITH cte__source AS (
+        SELECT
+            * EXCLUDE(record__valid_to),
+            COALESCE(record__valid_to, '9999-12-31 23:59:59'::TIMESTAMP) AS record__valid_to
+        FROM scd.{name}
+    )
     SELECT
         HASH(*COLUMNS(* EXCLUDE(record__valid_to))) AS uid__{name},
         {', '.join(hook_expressions)},
         *
-    FROM scd.{name}
+    FROM cte__source
     """
 
     return sql
