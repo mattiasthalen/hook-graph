@@ -38,10 +38,12 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
                     '{frame_name}' AS frame,
                     '{from_concept}' AS from_concept,
                     '{from_keyset}' AS from_keyset,
+                    '{from_hook_name}' AS from_hook_name,
                     {from_hook_name} AS from_hook,
                     '{to_concept}' AS to_concept,
                     '{to_keyset}' AS to_keyset,
-                    {to_hook_name} AS to_hook
+                    {to_hook_name} AS to_hook,
+                    '{to_hook_name}' AS to_hook_name
                 FROM hook.{frame_name}
                 WHERE {from_hook_name} IS NOT NULL AND {to_hook_name} IS NOT NULL
                 """
