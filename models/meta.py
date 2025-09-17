@@ -8,6 +8,8 @@ from sqlmesh import ExecutionContext, model
 with open("./models/manifest.yml", "r") as file:
     manifest = yaml.safe_load(file)
 
+enabled_models = True
+
 concepts = manifest.get("concepts")
 keysets = manifest.get("keysets")
 frames =  manifest.get("frames")
@@ -21,6 +23,7 @@ for frame in frames:
 
 @model(
     "meta.concepts",
+    enabled=enabled_models,
     kind="full",
     columns={
         "name": "text",
@@ -39,6 +42,7 @@ def execute(
 
 @model(
     "meta.keysets",
+    enabled=enabled_models,
     kind="full",
     columns={
         "name": "text",
@@ -59,6 +63,7 @@ def execute(
 
 @model(
     "meta.frames",
+    enabled=enabled_models,
     kind="full",
     columns={
         "name": "text",
@@ -78,6 +83,7 @@ def execute(
 
 @model(
     "meta.hooks",
+    enabled=enabled_models,
     kind="full",
     columns={
         "frame": "text",
