@@ -9,4 +9,4 @@ MODEL (
     zip TEXT
   ),
   grain "id, customer_id"
-);
+)

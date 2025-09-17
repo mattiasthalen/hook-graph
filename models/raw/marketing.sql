@@ -6,7 +6,7 @@ MODEL (
   columns (
     id INT,
     customer_id INT,
-    status TEXT,
+    status TEXT
   ),
   grain "id, customer_id"
-);
+)

@@ -10,4 +10,4 @@ MODEL (
     ds TEXT
   ),
   grain "id, ds"
-);
+)

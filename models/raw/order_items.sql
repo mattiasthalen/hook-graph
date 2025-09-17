@@ -1,4 +1,4 @@
--- File: models/raw/order_items.sql
+/* File: models/raw/order_items.sql */
 MODEL (
   name raw.order_items,
   kind SEED (
@@ -12,4 +12,4 @@ MODEL (
     ds TEXT
   ),
   grain "id, ds"
-);
+)
