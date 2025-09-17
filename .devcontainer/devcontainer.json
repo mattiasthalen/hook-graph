@@ -8,7 +8,8 @@
 		"vscode": {
 			"extensions": [
 				"tobikodata.sqlmesh",
-				"eamodio.gitlens"
+				"eamodio.gitlens",
+				"openai.chatgpt"
 			]
 		}
 	}
