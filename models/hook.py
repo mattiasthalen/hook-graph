@@ -11,6 +11,7 @@ blueprints =  manifest.get("frames")
 
 @model(
     "hook.@{name}",
+    enabled=True,
     is_sql=True,
     kind="VIEW",
     description="@{description}",
