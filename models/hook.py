@@ -26,9 +26,15 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
 
     hook_expressions = []
     for hook in hooks:
-        hook_name = hook.get("name")
+        hook_concept = hook.get("concept")
+        hook_qualifier = hook.get("qualifier")
         hook_keyset = hook.get("keyset")
         hook_business_key_field = hook.get("business_key_field")
+    
+        hook_name = f"hook__{hook_concept}"
+    
+        if hook_qualifier:
+            hook_name = f"{hook_name}__{hook_qualifier}"
 
         hook_expression = f"""
         CASE
