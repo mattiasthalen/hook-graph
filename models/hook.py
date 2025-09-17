@@ -52,7 +52,7 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
         FROM scd.{name}
     )
     SELECT
-        HASH(*COLUMNS(* EXCLUDE(record__valid_to))) AS uid__{name},
+        HASH(*COLUMNS(* EXCLUDE(record__valid_to)))::UBIGINT AS uid__{name},
         {', '.join(hook_expressions)},
         *
     FROM cte__source
