@@ -14,7 +14,7 @@ blueprints =  manifest.get("frames")
     is_sql=True,
     kind="VIEW",
     description="@{description}",
-    grains="uid__@{name}",
+    grains="record__uid",
     blueprints=blueprints,
 )
 def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
@@ -52,9 +52,9 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
         FROM scd.{name}
     )
     SELECT
-        HASH(*COLUMNS(* EXCLUDE(record__valid_to)))::UBIGINT AS uid__{name},
         {', '.join(hook_expressions)},
-        *
+        *,
+        HASH(*COLUMNS(* EXCLUDE(record__valid_to)))::UBIGINT AS record__uid
     FROM cte__source
     """
 
