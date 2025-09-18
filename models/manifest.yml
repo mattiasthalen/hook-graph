@@ -41,8 +41,8 @@ frames:
   hooks:
   - name: hook__item
     concept: item
-    keyset: sushi:item:id
-    business_key_field: id
+    keyset: sushi:item:id:ds
+    business_key_field: concat_ws('|', id::TEXT, ds::TEXT)
 
 - name: orders
   source_table: raw.orders
@@ -76,8 +76,8 @@ frames:
 
   - name: hook__item
     concept: item
-    keyset: sushi:item:id
-    business_key_field: item_id
+    keyset: sushi:item:id:ds
+    business_key_field: concat_ws('|', item_id::TEXT, ds::TEXT)
 
 - name: waiter_names
   source_table: raw.waiter_names
