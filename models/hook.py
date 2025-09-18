@@ -31,9 +31,9 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
         hook_qualifier = hook.get("qualifier")
         hook_keyset = hook.get("keyset")
         hook_business_key_field = hook.get("business_key_field")
-    
+
         hook_name = f"hook__{hook_concept}"
-    
+
         if hook_qualifier:
             hook_name = f"{hook_name}__{hook_qualifier}"
 
@@ -46,17 +46,11 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
         hook_expressions.append(hook_expression)
 
     sql = f"""
-    WITH cte__source AS (
-        SELECT
-            * EXCLUDE(record__valid_to),
-            COALESCE(record__valid_to, '9999-12-31 23:59:59'::TIMESTAMP) AS record__valid_to
-        FROM scd.{name}
-    )
     SELECT
         {', '.join(hook_expressions)},
         *,
-        HASH(*COLUMNS(* EXCLUDE(record__valid_to)))::UBIGINT AS record__uid
-    FROM cte__source
+        HASH(*COLUMNS(*))::UBIGINT AS record__uid
+    FROM raw.{name}
     """
 
     return sql
