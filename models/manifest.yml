@@ -18,10 +18,10 @@ keysets:
   source_system: sushi
   description: Native item identifier from items.
 
-- name: sushi:order:id
+- name: sushi:order:id:ds
   concept: order
   source_system: sushi
-  description: Native order identifier from orders.
+  description: Native order identifier from orders, id resets every day.
 
 - name: sushi:customer:id
   concept: customer
@@ -36,6 +36,7 @@ keysets:
 frames:
 - name: items
   source_table: raw.items
+  grain: [id, ds]
   description: Item catalog with names and prices; referenced by order_items.
   hooks:
   - name: hook__item
@@ -45,12 +46,13 @@ frames:
 
 - name: orders
   source_table: raw.orders
+  grain: [id, ds]
   description: Orders with timing and server identifiers; parent to order_items and linked to customers.
   hooks:
   - name: hook__order
     concept: order
-    keyset: sushi:order:id
-    business_key_field: id
+    keyset: sushi:order:id:ds
+    business_key_field: concat_ws('|', id::TEXT, ds::TEXT)
 
   - name: hook__customer
     concept: customer
@@ -64,12 +66,13 @@ frames:
 
 - name: order_items
   source_table: raw.order_items
+  grain: [id, ds]
   description: Line items per order, linking orders to items with quantities.
   hooks:
   - name: hook__order
     concept: order
-    keyset: sushi:order:id
-    business_key_field: order_id
+    keyset: sushi:order:id:ds
+    business_key_field: concat_ws('|', order_id::TEXT, ds::TEXT)
 
   - name: hook__item
     concept: item
@@ -78,6 +81,7 @@ frames:
 
 - name: waiter_names
   source_table: raw.waiter_names
+  grain: [id]
   description: Lookup of waiter identifiers to staff names.
   hooks:
   - name: hook__waiter
@@ -87,6 +91,7 @@ frames:
 
 - name: demographics
   source_table: raw.demographics
+  grain: [id, customer_id]
   description: Customer demographics (e.g., ZIP/region) for enrichment.
   hooks:
   - name: hook__customer
@@ -96,6 +101,7 @@ frames:
 
 - name: marketing
   source_table: raw.marketing
+  grain: [id, customer_id]
   description: Customer marketing attributes (e.g., subscription/status) for segmentation.
   hooks:
   - name: hook__customer
