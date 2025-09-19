@@ -50,7 +50,7 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
     SELECT
         {', '.join(hook_expressions)},
         *,
-        HASH(*COLUMNS(*))::UBIGINT AS record__uid
+        SHA256(STRUCT_PACK(*COLUMNS(*))::JSON) AS record__uid
     FROM {source_table}
     """
 
