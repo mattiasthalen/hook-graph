@@ -6,11 +6,12 @@ from sqlmesh.core.macros import MacroEvaluator
 
 @model(
     "graph.edges",
+    enabled=True,
     is_sql=True,
     kind="VIEW",
 )
 def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
-    with open("./models/manifest.yml", "r") as file:
+    with open("./manifest.yml", "r") as file:
         manifest = yaml.safe_load(file)
 
     frames =  manifest.get("frames")

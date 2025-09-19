@@ -4,7 +4,7 @@ from sqlglot import exp
 from sqlmesh.core.model import model
 from sqlmesh.core.macros import MacroEvaluator
 
-with open("./models/manifest.yml", "r") as file:
+with open("./manifest.yml", "r") as file:
     manifest = yaml.safe_load(file)
 
 blueprints =  manifest.get("frames")
@@ -21,6 +21,7 @@ blueprints =  manifest.get("frames")
 def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
 
     name = evaluator.blueprint_var("name")
+    source_table = evaluator.blueprint_var("source_table")
     hooks = evaluator.blueprint_var("hooks")
 
     assert hooks, f"No hooks defined for frame {name}"
@@ -49,8 +50,8 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
     SELECT
         {', '.join(hook_expressions)},
         *,
-        HASH(*COLUMNS(*))::UBIGINT AS record__uid
-    FROM raw.{name}
+        SHA256(STRUCT_PACK(*COLUMNS(*))::JSON) AS record__uid
+    FROM {source_table}
     """
 
     return sql

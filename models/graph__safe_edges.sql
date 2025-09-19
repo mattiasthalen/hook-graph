@@ -1,6 +1,6 @@
 MODEL (
   name graph.safe_edges,
-  enabled TRUE,
+  enabled True,
   kind VIEW
 );
 

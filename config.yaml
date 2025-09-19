@@ -13,7 +13,7 @@ gateways:
       # pretty_sql: False
       # schema_differ_overrides: 
       # catalog_type_overrides: 
-      # catalogs: 
+      #catalogs:
       # extensions: 
       # connector_config: 
       # secrets: 

@@ -1,6 +1,6 @@
 MODEL (
   name scd.@name,
-  enabled TRUE,
+  enabled FALSE,
   kind SCD_TYPE_2_BY_COLUMN (
     unique_key @unique_key,
     columns *,

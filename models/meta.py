@@ -5,7 +5,7 @@ import yaml
 from datetime import datetime
 from sqlmesh import ExecutionContext, model
 
-with open("./models/manifest.yml", "r") as file:
+with open("./manifest.yml", "r") as file:
     manifest = yaml.safe_load(file)
 
 enabled_models = True
