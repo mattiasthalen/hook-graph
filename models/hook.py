@@ -11,7 +11,7 @@ blueprints =  manifest.get("frames")
 
 @model(
     "hook.@{name}",
-    enabled=False,
+    enabled=True,
     is_sql=True,
     kind="VIEW",
     description="@{description}",
@@ -21,6 +21,7 @@ blueprints =  manifest.get("frames")
 def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
 
     name = evaluator.blueprint_var("name")
+    source_table = evaluator.blueprint_var("source_table")
     hooks = evaluator.blueprint_var("hooks")
 
     assert hooks, f"No hooks defined for frame {name}"
@@ -50,7 +51,7 @@ def entrypoint(evaluator: MacroEvaluator) -> str | exp.Expression:
         {', '.join(hook_expressions)},
         *,
         HASH(*COLUMNS(*))::UBIGINT AS record__uid
-    FROM raw.{name}
+    FROM {source_table}
     """
 
     return sql

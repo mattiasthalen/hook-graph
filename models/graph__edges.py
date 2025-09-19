@@ -6,7 +6,7 @@ from sqlmesh.core.macros import MacroEvaluator
 
 @model(
     "graph.edges",
-    enabled=False,
+    enabled=True,
     is_sql=True,
     kind="VIEW",
 )

@@ -1,202 +1,204 @@
 concepts:
 
   - name: part
-    description: A part in the product catalog (PART).
+    description: A part in the product catalog (p_part).
 
   - name: supplier
-    description: A supplier company (SUPPLIER).
+    description: A supplier company (s_supp).
 
   - name: customer
-    description: A customer account (CUSTOMER).
+    description: A customer account (c_cust).
 
   - name: order
-    description: Sales order header (ORDERS).
+    description: Sales order header (o_order).
 
   - name: line
-    description: Sales order line item (LINEITEM).
+    description: Sales order line item (l_line).
 
   - name: partsupp
-    description: Supplier's offer for a specific part (PARTSUPP).
+    description: Supplier’s offer for a specific part (ps_partsupp).
 
   - name: nation
-    description: Nation for geo segmentation (NATION).
+    description: Nation for geo segmentation (n_nation).
 
   - name: region
-    description: Region for geo segmentation (REGION).
+    description: Region for geo segmentation (r_region).
+
 
 keysets:
 
   - name: tpch:part:partkey
     concept: part
     source_system: tpch
-    description: Native PART identifier from PART.PARTKEY
+    description: Native PART identifier from p_partkey
 
   - name: tpch:supplier:suppkey
     concept: supplier
     source_system: tpch
-    description: Native SUPPLIER identifier from SUPPLIER.SUPPKEY
+    description: Native SUPPLIER identifier from s_suppkey
 
   - name: tpch:customer:custkey
     concept: customer
     source_system: tpch
-    description: Native CUSTOMER identifier from CUSTOMER.CUSTKEY
+    description: Native CUSTOMER identifier from c_custkey
 
   - name: tpch:order:orderkey
     concept: order
     source_system: tpch
-    description: Native ORDERS identifier from ORDERS.ORDERKEY
+    description: Native ORDERS identifier from o_orderkey
 
   - name: tpch:line:orderkey:linenumber
     concept: line
     source_system: tpch
-    description: Composed LINEITEM identifier from (ORDERKEY, LINENUMBER)
+    description: Composed LINEITEM identifier from (l_orderkey, l_linenumber)
 
   - name: tpch:partsupp:partkey:suppkey
     concept: partsupp
     source_system: tpch
-    description: Composed PARTSUPP identifier from (PARTKEY, SUPPKEY)
+    description: Composed PARTSUPP identifier from (ps_partkey, ps_suppkey)
 
   - name: tpch:nation:nationkey
     concept: nation
     source_system: tpch
-    description: Native NATION identifier from NATION.NATIONKEY
+    description: Native NATION identifier from n_nationkey
 
   - name: tpch:region:regionkey
     concept: region
     source_system: tpch
-    description: Native REGION identifier from REGION.REGIONKEY
+    description: Native REGION identifier from r_regionkey
+
 
 frames:
 
   - name: part
-    source_table: raw.tpch__part
-    grain: [PARTKEY]
+    source_table: data.main.part
+    grain: [p_partkey]
     description: Catalog of parts.
     hooks:
 
       - name: hook__part
         concept: part
         keyset: tpch:part:partkey
-        business_key_field: PARTKEY
+        business_key_field: p_partkey
 
   - name: supplier
-    source_table: raw.tpch__supplier
-    grain: [SUPPKEY]
+    source_table: data.main.supplier
+    grain: [s_suppkey]
     description: Supplier master data.
     hooks:
 
       - name: hook__supplier
         concept: supplier
         keyset: tpch:supplier:suppkey
-        business_key_field: SUPPKEY
+        business_key_field: s_suppkey
 
       - name: hook__nation
         concept: nation
         keyset: tpch:nation:nationkey
-        business_key_field: NATIONKEY
+        business_key_field: s_nationkey
 
   - name: customer
-    source_table: raw.tpch__customer
-    grain: [CUSTKEY]
+    source_table: data.main.customer
+    grain: [c_custkey]
     description: Customer master data.
     hooks:
 
       - name: hook__customer
         concept: customer
         keyset: tpch:customer:custkey
-        business_key_field: CUSTKEY
+        business_key_field: c_custkey
 
       - name: hook__nation
         concept: nation
         keyset: tpch:nation:nationkey
-        business_key_field: NATIONKEY
+        business_key_field: c_nationkey
 
   - name: orders
-    source_table: raw.tpch__orders
-    grain: [ORDERKEY]
+    source_table: data.main.orders
+    grain: [o_orderkey]
     description: Orders header.
     hooks:
 
       - name: hook__order
         concept: order
         keyset: tpch:order:orderkey
-        business_key_field: ORDERKEY
+        business_key_field: o_orderkey
 
       - name: hook__customer
         concept: customer
         keyset: tpch:customer:custkey
-        business_key_field: CUSTKEY
+        business_key_field: o_custkey
 
   - name: lineitem
-    source_table: raw.tpch__lineitem
-    grain: [ORDERKEY, LINENUMBER]
+    source_table: data.main.lineitem
+    grain: [l_orderkey, l_linenumber]
     description: Order line facts.
     hooks:
 
       - name: hook__line
         concept: line
         keyset: tpch:line:orderkey:linenumber
-        business_key_field: concat_ws('|', ORDERKEY::TEXT, LINENUMBER::TEXT)
+        business_key_field: concat_ws('|', l_orderkey::TEXT, l_linenumber::TEXT)
 
       - name: hook__order
         concept: order
         keyset: tpch:order:orderkey
-        business_key_field: ORDERKEY
+        business_key_field: l_orderkey
 
       - name: hook__part
         concept: part
         keyset: tpch:part:partkey
-        business_key_field: PARTKEY
+        business_key_field: l_partkey
 
       - name: hook__supplier
         concept: supplier
         keyset: tpch:supplier:suppkey
-        business_key_field: SUPPKEY
+        business_key_field: l_suppkey
 
   - name: partsupp
-    source_table: raw.tpch__partsupp
-    grain: [PARTKEY, SUPPKEY]
+    source_table: data.main.partsupp
+    grain: [ps_partkey, ps_suppkey]
     description: Supplier-part offers with costs and availability.
     hooks:
 
       - name: hook__partsupp
         concept: partsupp
         keyset: tpch:partsupp:partkey:suppkey
-        business_key_field: concat_ws('|', PARTKEY::TEXT, SUPPKEY::TEXT)
+        business_key_field: concat_ws('|', ps_partkey::TEXT, ps_suppkey::TEXT)
 
       - name: hook__part
         concept: part
         keyset: tpch:part:partkey
-        business_key_field: PARTKEY
+        business_key_field: ps_partkey
 
       - name: hook__supplier
         concept: supplier
         keyset: tpch:supplier:suppkey
-        business_key_field: SUPPKEY
+        business_key_field: ps_suppkey
 
   - name: nation
-    source_table: raw.tpch__nation
-    grain: [NATIONKEY]
+    source_table: data.main.nation
+    grain: [n_nationkey]
     description: Nation dimension.
     hooks:
 
       - name: hook__nation
         concept: nation
         keyset: tpch:nation:nationkey
-        business_key_field: NATIONKEY
+        business_key_field: n_nationkey
 
       - name: hook__region
         concept: region
         keyset: tpch:region:regionkey
-        business_key_field: REGIONKEY
+        business_key_field: n_regionkey
 
   - name: region
-    source_table: raw.tpch__region
-    grain: [REGIONKEY]
+    source_table: data.main.region
+    grain: [r_regionkey]
     description: Region dimension.
     hooks:
 
       - name: hook__region
         concept: region
         keyset: tpch:region:regionkey
-        business_key_field: REGIONKEY
+        business_key_field: r_regionkey
