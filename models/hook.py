@@ -4,7 +4,7 @@ from sqlglot import exp
 from sqlmesh.core.model import model
 from sqlmesh.core.macros import MacroEvaluator
 
-with open("./models/manifest.yml", "r") as file:
+with open("./manifest.yml", "r") as file:
     manifest = yaml.safe_load(file)
 
 blueprints =  manifest.get("frames")
