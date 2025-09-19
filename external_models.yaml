@@ -1,0 +1,85 @@
+- name: '"data"."main"."customer"'
+  columns:
+    c_custkey: BIGINT
+    c_name: TEXT
+    c_address: TEXT
+    c_nationkey: INT
+    c_phone: TEXT
+    c_acctbal: DECIMAL(15, 2)
+    c_mktsegment: TEXT
+    c_comment: TEXT
+  gateway: duckdb
+- name: '"data"."main"."lineitem"'
+  columns:
+    l_orderkey: BIGINT
+    l_partkey: BIGINT
+    l_suppkey: BIGINT
+    l_linenumber: BIGINT
+    l_quantity: DECIMAL(15, 2)
+    l_extendedprice: DECIMAL(15, 2)
+    l_discount: DECIMAL(15, 2)
+    l_tax: DECIMAL(15, 2)
+    l_returnflag: TEXT
+    l_linestatus: TEXT
+    l_shipdate: DATE
+    l_commitdate: DATE
+    l_receiptdate: DATE
+    l_shipinstruct: TEXT
+    l_shipmode: TEXT
+    l_comment: TEXT
+  gateway: duckdb
+- name: '"data"."main"."nation"'
+  columns:
+    n_nationkey: INT
+    n_name: TEXT
+    n_regionkey: INT
+    n_comment: TEXT
+  gateway: duckdb
+- name: '"data"."main"."orders"'
+  columns:
+    o_orderkey: BIGINT
+    o_custkey: BIGINT
+    o_orderstatus: TEXT
+    o_totalprice: DECIMAL(15, 2)
+    o_orderdate: DATE
+    o_orderpriority: TEXT
+    o_clerk: TEXT
+    o_shippriority: INT
+    o_comment: TEXT
+  gateway: duckdb
+- name: '"data"."main"."part"'
+  columns:
+    p_partkey: BIGINT
+    p_name: TEXT
+    p_mfgr: TEXT
+    p_brand: TEXT
+    p_type: TEXT
+    p_size: INT
+    p_container: TEXT
+    p_retailprice: DECIMAL(15, 2)
+    p_comment: TEXT
+  gateway: duckdb
+- name: '"data"."main"."partsupp"'
+  columns:
+    ps_partkey: BIGINT
+    ps_suppkey: BIGINT
+    ps_availqty: BIGINT
+    ps_supplycost: DECIMAL(15, 2)
+    ps_comment: TEXT
+  gateway: duckdb
+- name: '"data"."main"."region"'
+  columns:
+    r_regionkey: INT
+    r_name: TEXT
+    r_comment: TEXT
+  gateway: duckdb
+- name: '"data"."main"."supplier"'
+  columns:
+    s_suppkey: BIGINT
+    s_name: TEXT
+    s_address: TEXT
+    s_nationkey: INT
+    s_phone: TEXT
+    s_acctbal: DECIMAL(15, 2)
+    s_comment: TEXT
+  gateway: duckdb

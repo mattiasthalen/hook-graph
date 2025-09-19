@@ -1,2 +1,2 @@
 seed-data:
-	duckcli tpch.duckdb --execute "CALL dbgen(sf=1);"
+	duckcli data.duckdb --execute "CALL dbgen(sf=1);"
