@@ -1,2 +1,2 @@
 seed-data:
-	duckcli data.duckdb --execute "CALL dbgen(sf=1);"
+	uv run seed_data.py
