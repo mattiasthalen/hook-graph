@@ -1,6 +1,6 @@
 MODEL (
   name uss._bridge,
-  enabled TRUE,
+  enabled FALSE,
   kind VIEW
 );
 
