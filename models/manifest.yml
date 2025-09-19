@@ -1,110 +1,202 @@
 concepts:
-- name: item
-  description: Menu items sold at the restaurant (e.g., maki, nigiri), referenced by line items.
 
-- name: order
-  description: A customer bill/visit; parent for one or more order line items.
+  - name: part
+    description: A part in the product catalog (PART).
 
-- name: customer
-  description: People placing orders; enriched by demographics and marketing.
+  - name: supplier
+    description: A supplier company (SUPPLIER).
 
-- name: waiter
-  description: Front-of-house staff serving orders.
+  - name: customer
+    description: A customer account (CUSTOMER).
 
+  - name: order
+    description: Sales order header (ORDERS).
+
+  - name: line
+    description: Sales order line item (LINEITEM).
+
+  - name: partsupp
+    description: Supplier's offer for a specific part (PARTSUPP).
+
+  - name: nation
+    description: Nation for geo segmentation (NATION).
+
+  - name: region
+    description: Region for geo segmentation (REGION).
 
 keysets:
-- name: sushi:item:id
-  concept: item
-  source_system: sushi
-  description: Native item identifier from items.
 
-- name: sushi:order:id:ds
-  concept: order
-  source_system: sushi
-  description: Native order identifier from orders, id resets every day.
+  - name: tpch:part:partkey
+    concept: part
+    source_system: tpch
+    description: Native PART identifier from PART.PARTKEY
 
-- name: sushi:customer:id
-  concept: customer
-  source_system: sushi
-  description: Native customer identifier used across orders/demographics/marketing.
+  - name: tpch:supplier:suppkey
+    concept: supplier
+    source_system: tpch
+    description: Native SUPPLIER identifier from SUPPLIER.SUPPKEY
 
-- name: sushi:waiter:id
-  concept: waiter
-  source_system: sushi
-  description: Native waiter identifier from orders/waiter_names.
+  - name: tpch:customer:custkey
+    concept: customer
+    source_system: tpch
+    description: Native CUSTOMER identifier from CUSTOMER.CUSTKEY
+
+  - name: tpch:order:orderkey
+    concept: order
+    source_system: tpch
+    description: Native ORDERS identifier from ORDERS.ORDERKEY
+
+  - name: tpch:line:orderkey:linenumber
+    concept: line
+    source_system: tpch
+    description: Composed LINEITEM identifier from (ORDERKEY, LINENUMBER)
+
+  - name: tpch:partsupp:partkey:suppkey
+    concept: partsupp
+    source_system: tpch
+    description: Composed PARTSUPP identifier from (PARTKEY, SUPPKEY)
+
+  - name: tpch:nation:nationkey
+    concept: nation
+    source_system: tpch
+    description: Native NATION identifier from NATION.NATIONKEY
+
+  - name: tpch:region:regionkey
+    concept: region
+    source_system: tpch
+    description: Native REGION identifier from REGION.REGIONKEY
 
 frames:
-- name: items
-  source_table: raw.items
-  grain: [id, ds]
-  description: Item catalog with names and prices; referenced by order_items.
-  hooks:
-  - name: hook__item
-    concept: item
-    keyset: sushi:item:id:ds
-    business_key_field: concat_ws('|', id::TEXT, ds::TEXT)
 
-- name: orders
-  source_table: raw.orders
-  grain: [id, ds]
-  description: Orders with timing and server identifiers; parent to order_items and linked to customers.
-  hooks:
-  - name: hook__order
-    concept: order
-    keyset: sushi:order:id:ds
-    business_key_field: concat_ws('|', id::TEXT, ds::TEXT)
+  - name: part
+    source_table: raw.tpch__part
+    grain: [PARTKEY]
+    description: Catalog of parts.
+    hooks:
 
-  - name: hook__customer
-    concept: customer
-    keyset: sushi:customer:id
-    business_key_field: customer_id
+      - name: hook__part
+        concept: part
+        keyset: tpch:part:partkey
+        business_key_field: PARTKEY
 
-  - name: hook__waiter
-    concept: waiter
-    keyset: sushi:waiter:id
-    business_key_field: waiter_id
+  - name: supplier
+    source_table: raw.tpch__supplier
+    grain: [SUPPKEY]
+    description: Supplier master data.
+    hooks:
 
-- name: order_items
-  source_table: raw.order_items
-  grain: [id, ds]
-  description: Line items per order, linking orders to items with quantities.
-  hooks:
-  - name: hook__order
-    concept: order
-    keyset: sushi:order:id:ds
-    business_key_field: concat_ws('|', order_id::TEXT, ds::TEXT)
+      - name: hook__supplier
+        concept: supplier
+        keyset: tpch:supplier:suppkey
+        business_key_field: SUPPKEY
 
-  - name: hook__item
-    concept: item
-    keyset: sushi:item:id:ds
-    business_key_field: concat_ws('|', item_id::TEXT, ds::TEXT)
+      - name: hook__nation
+        concept: nation
+        keyset: tpch:nation:nationkey
+        business_key_field: NATIONKEY
 
-- name: waiter_names
-  source_table: raw.waiter_names
-  grain: [id]
-  description: Lookup of waiter identifiers to staff names.
-  hooks:
-  - name: hook__waiter
-    concept: waiter
-    keyset: sushi:waiter:id
-    business_key_field: id
+  - name: customer
+    source_table: raw.tpch__customer
+    grain: [CUSTKEY]
+    description: Customer master data.
+    hooks:
 
-- name: demographics
-  source_table: raw.demographics
-  grain: [id, customer_id]
-  description: Customer demographics (e.g., ZIP/region) for enrichment.
-  hooks:
-  - name: hook__customer
-    concept: customer
-    keyset: sushi:customer:id
-    business_key_field: customer_id
+      - name: hook__customer
+        concept: customer
+        keyset: tpch:customer:custkey
+        business_key_field: CUSTKEY
 
-- name: marketing
-  source_table: raw.marketing
-  grain: [id, customer_id]
-  description: Customer marketing attributes (e.g., subscription/status) for segmentation.
-  hooks:
-  - name: hook__customer
-    concept: customer
-    keyset: sushi:customer:id
-    business_key_field: customer_id
+      - name: hook__nation
+        concept: nation
+        keyset: tpch:nation:nationkey
+        business_key_field: NATIONKEY
+
+  - name: orders
+    source_table: raw.tpch__orders
+    grain: [ORDERKEY]
+    description: Orders header.
+    hooks:
+
+      - name: hook__order
+        concept: order
+        keyset: tpch:order:orderkey
+        business_key_field: ORDERKEY
+
+      - name: hook__customer
+        concept: customer
+        keyset: tpch:customer:custkey
+        business_key_field: CUSTKEY
+
+  - name: lineitem
+    source_table: raw.tpch__lineitem
+    grain: [ORDERKEY, LINENUMBER]
+    description: Order line facts.
+    hooks:
+
+      - name: hook__line
+        concept: line
+        keyset: tpch:line:orderkey:linenumber
+        business_key_field: concat_ws('|', ORDERKEY::TEXT, LINENUMBER::TEXT)
+
+      - name: hook__order
+        concept: order
+        keyset: tpch:order:orderkey
+        business_key_field: ORDERKEY
+
+      - name: hook__part
+        concept: part
+        keyset: tpch:part:partkey
+        business_key_field: PARTKEY
+
+      - name: hook__supplier
+        concept: supplier
+        keyset: tpch:supplier:suppkey
+        business_key_field: SUPPKEY
+
+  - name: partsupp
+    source_table: raw.tpch__partsupp
+    grain: [PARTKEY, SUPPKEY]
+    description: Supplier-part offers with costs and availability.
+    hooks:
+
+      - name: hook__partsupp
+        concept: partsupp
+        keyset: tpch:partsupp:partkey:suppkey
+        business_key_field: concat_ws('|', PARTKEY::TEXT, SUPPKEY::TEXT)
+
+      - name: hook__part
+        concept: part
+        keyset: tpch:part:partkey
+        business_key_field: PARTKEY
+
+      - name: hook__supplier
+        concept: supplier
+        keyset: tpch:supplier:suppkey
+        business_key_field: SUPPKEY
+
+  - name: nation
+    source_table: raw.tpch__nation
+    grain: [NATIONKEY]
+    description: Nation dimension.
+    hooks:
+
+      - name: hook__nation
+        concept: nation
+        keyset: tpch:nation:nationkey
+        business_key_field: NATIONKEY
+
+      - name: hook__region
+        concept: region
+        keyset: tpch:region:regionkey
+        business_key_field: REGIONKEY
+
+  - name: region
+    source_table: raw.tpch__region
+    grain: [REGIONKEY]
+    description: Region dimension.
+    hooks:
+
+      - name: hook__region
+        concept: region
+        keyset: tpch:region:regionkey
+        business_key_field: REGIONKEY
